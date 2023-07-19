@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import {
   Button,
-  ButtonProps,
   Container,
   Divider,
   Dropdown,
   DropdownItemProps,
   DropdownProps,
   Header,
-  Icon,
   Input,
   InputOnChangeData,
   Label,
@@ -19,10 +17,12 @@ import * as _ from "lodash";
 import "./styling.css";
 
 import config from "./config.json";
+import { CopyTextBox } from "./CopyTextBox";
 
 enum Implementations {
   Features = "features",
   Bugs = "bugs",
+  QA = "qa",
 }
 
 function getCurrentDate(separator = "") {
@@ -47,7 +47,8 @@ const App: React.FC = () => {
   const [jiraPrTitle, setJiraPrTitle] = useState("");
   const [prBody, setPrBody] = useState("");
   const [prTitle, setPrTitle] = useState("");
-  const [prChanges, setPrChanges] = useState("");
+  const [defaultAndroidUrl, setDefaultAndroidUrl] = useState("");
+  const [androidUrl, setAndroidUrl] = useState("");
   const [implementation, setImplementation] = useState<string>(
     Implementations.Features
   );
@@ -82,12 +83,21 @@ const App: React.FC = () => {
     const jiraPrInfo =
       "## Description\n <changes> " +
       "\n\n## Ticket" +
-      "[" +
+      "\n[" +
       jiraIdPr +
       "]" +
       "(https://headversity.atlassian.net/browse/" +
-      jiraIdPr;
+      jiraIdPr +
+      ")";
     setPrBody(jiraPrInfo);
+  };
+
+  const generateNewAndroidUrl = () => {
+    if (defaultAndroidUrl === "") {
+      return;
+    }
+    const newAndroidUrl = defaultAndroidUrl.replace("localhost", "10.0.2.2");
+    setAndroidUrl(newAndroidUrl);
   };
 
   const handleJiraIdChange = (
@@ -118,39 +128,13 @@ const App: React.FC = () => {
     setJiraPrTitle(event.currentTarget.value);
   };
 
-  const onCopyIosSimulatorPathClick = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    data: ButtonProps
+  const handleAndroidUrlChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    _: InputOnChangeData
   ) => {
-    navigator.clipboard.writeText(iOSSimulatorCommand);
+    setDefaultAndroidUrl(event.currentTarget.value);
   };
 
-  const onCopyAndroidEmulatorPath = (
-    _: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    __: ButtonProps
-  ) => {
-    navigator.clipboard.writeText(androidEmulatorCommand);
-  };
-
-  const onCopyBranchNameClick = (
-    _: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    __: ButtonProps
-  ) => {
-    navigator.clipboard.writeText(branchName);
-  };
-
-  const onCopyPrTitleNameClick = (
-    _: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    __: ButtonProps
-  ) => {
-    navigator.clipboard.writeText(prTitle);
-  };
-  const onCopyPrBodyNameClick = (
-    _: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    __: ButtonProps
-  ) => {
-    navigator.clipboard.writeText(prBody);
-  };
   const onImplementationsSelect = (
     _: React.SyntheticEvent<HTMLElement, Event>,
     data: DropdownProps
@@ -164,7 +148,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div style={{ backgroundColor: "#023047", height: "180vh" }}>
+    <div style={{ backgroundColor: "#023047", height: "200vh" }}>
       <Container>
         <Segment>
           <Header>Branch Name Generator</Header>
@@ -198,16 +182,7 @@ const App: React.FC = () => {
             <>
               <Divider />
               <Label>{branchName}</Label>
-              <Button
-                size="mini"
-                animated="vertical"
-                onClick={onCopyBranchNameClick}
-              >
-                <Button.Content hidden>Copy</Button.Content>
-                <Button.Content visible>
-                  <Icon name="copy" />
-                </Button.Content>
-              </Button>
+              <CopyTextBox content={branchName} />
             </>
           )}
         </Segment>
@@ -229,29 +204,30 @@ const App: React.FC = () => {
           </Button>
           {prTitle && prBody && (
             <>
-            <Divider />
+              <Divider />
               <Label>{prTitle}</Label>
-              <Button
-                size="mini"
-                animated="vertical"
-                onClick={onCopyPrTitleNameClick}
-              >
-                <Button.Content hidden>Copy</Button.Content>
-                <Button.Content visible>
-                  <Icon name="copy" />
-                </Button.Content>
-              </Button>
+              <CopyTextBox content={prTitle} />
               <Label>{prBody}</Label>
-              <Button
-                size="mini"
-                animated="vertical"
-                onClick={onCopyPrBodyNameClick}
-              >
-                <Button.Content hidden>Copy</Button.Content>
-                <Button.Content visible>
-                  <Icon name="copy" />
-                </Button.Content>
-              </Button>
+              <CopyTextBox content={prBody} />
+            </>
+          )}
+        </Segment>
+        <Segment>
+          <Header>Android URL Editor</Header>
+          <Divider />
+          <Input
+            value={defaultAndroidUrl}
+            placeholder="URL"
+            onChange={handleAndroidUrlChange}
+          />
+          <Button primary onClick={generateNewAndroidUrl}>
+            Set URL to Android
+          </Button>
+          {androidUrl && (
+            <>
+              <Divider />
+              <Label>{androidUrl}</Label>
+              <CopyTextBox content={androidUrl} />
             </>
           )}
         </Segment>
@@ -261,16 +237,7 @@ const App: React.FC = () => {
           <pre>
             <code>{iOSSimulatorCommand}</code>
           </pre>
-          <Button
-            size="mini"
-            animated="vertical"
-            onClick={onCopyIosSimulatorPathClick}
-          >
-            <Button.Content hidden>Copy</Button.Content>
-            <Button.Content visible>
-              <Icon name="copy" />
-            </Button.Content>
-          </Button>
+          <CopyTextBox content={iOSSimulatorCommand} />
         </Segment>
         <Segment>
           <Header>Android Simulator Path</Header>
@@ -278,16 +245,7 @@ const App: React.FC = () => {
           <pre>
             <code>{androidEmulatorCommand}</code>
           </pre>
-          <Button
-            size="mini"
-            animated="vertical"
-            onClick={onCopyAndroidEmulatorPath}
-          >
-            <Button.Content hidden>Copy</Button.Content>
-            <Button.Content visible>
-              <Icon name="copy" />
-            </Button.Content>
-          </Button>
+          <CopyTextBox content={androidEmulatorCommand} />
         </Segment>
         <Segment>
           <Header>Android Terminal Commands</Header>
@@ -308,6 +266,37 @@ const App: React.FC = () => {
           </List>
         </Segment>
         <Segment>
+          <Header>General Information</Header>
+          <Divider />
+          <List>
+            <List.Item>
+              <h3>Android:</h3>
+              <p>
+                Default android url on simulator:
+                <pre>
+                  <code>10.0.2.2:3004</code>
+                </pre>
+              </p>
+            </List.Item>
+            <List.Item>
+              <label>Debugging Android Chrome (simulator):</label>
+              <pre>
+                <code>chrome://inspect#devices</code>
+              </pre>
+            </List.Item>
+            <List.Item>
+              <label>
+                <h3>Ports</h3>
+              </label>
+              <p>Team: 3001</p>
+              <p>Team Admin: 3002</p>
+              <p>People: 3003</p>
+              <p>Solo: 3004</p>
+              <p>BullMQ: 3000 (:3000/queues)</p>
+            </List.Item>
+          </List>
+        </Segment>
+        <Segment>
           <Header>Commands:</Header>
           <Divider />
           <List>
@@ -319,26 +308,15 @@ const App: React.FC = () => {
               </pre>
             </List.Item>
           </List>
-        </Segment>
-        <Segment>
-          <Header>General Information</Header>
-          <Divider />
           <List>
+            <h4>DB Commands</h4>
             <List.Item>
-              <label>Android:</label>
-              <p>
-                Default android url on simulator:
-                <pre>
-                  <code>10.0.2.2:3004</code>
-                </pre>
-              </p>
+              <label>Refresh database</label>
+              <pre>node ace migration:fresh</pre>
             </List.Item>
             <List.Item>
-              <label>Ports</label>
-              <p>Team: 3001</p>
-              <p>Team Admin: 3002</p>
-              <p>People: 3003</p>
-              <p>Solo: 3004</p>
+              <label>Reseed database</label>
+              <pre>node ace db:seed</pre>
             </List.Item>
           </List>
         </Segment>
