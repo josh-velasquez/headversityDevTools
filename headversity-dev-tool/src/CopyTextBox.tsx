@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Divider, Icon, Label } from "semantic-ui-react";
+import { Button, ButtonProps, Icon } from "semantic-ui-react";
 
 interface CopyTextBoxProps {
   content: string;
