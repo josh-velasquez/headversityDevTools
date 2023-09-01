@@ -1,9 +1,10 @@
 {
   "username": "username",
   "features": {
-    "enableReminderPopup": false
+    "enableReminderPopup": false,
+    "showDevInfo": false
   },
   "settings": {
-    "androidEmulatorName": "androidName"
+    "androidEmulatorName": "androidEmulatorName"
   }
 }

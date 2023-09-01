@@ -158,7 +158,7 @@ function App() {
     <div
       style={{
         backgroundColor: "#023047",
-        height: "230vh",
+        height: !config.features.showDevInfo ? "100vh" : "230vh",
         paddingTop: "50px",
       }}
     >
@@ -233,129 +233,135 @@ function App() {
             </>
           )}
         </Segment>
-        <Segment>
-          <Header>iOS Simulator</Header>
-          <Divider />
-          <pre>
-            <code>{iOSSimulatorCommand}</code>
-          </pre>
-          <CopyTextBox content={iOSSimulatorCommand} />
-        </Segment>
-        <Segment>
-          <Header>Android Simulator</Header>
-          <Divider />
-          <pre>
-            <code>{androidEmulatorCommand}</code>
-          </pre>
-          <CopyTextBox content={androidEmulatorCommand} />
-        </Segment>
-        <Segment>
-          <Header>Android URL Editor</Header>
-          <Divider />
-          <Input
-            value={defaultAndroidUrl}
-            placeholder="URL"
-            onChange={handleAndroidUrlChange}
-          />
-          <Button primary onClick={generateNewAndroidUrl}>
-            Set URL to Android
-          </Button>
-          {androidUrl && (
-            <>
+        {config.features.showDevInfo && (
+          <>
+            <Segment>
+              <Header>iOS Simulator</Header>
               <Divider />
-              <Label>{androidUrl}</Label>
-              <CopyTextBox content={androidUrl} />
-            </>
-          )}
-        </Segment>
-        <Segment>
-          <Header>Android Terminal Commands</Header>
-          <Divider />
-          <List>
-            <List.Item>
-              <label>Listing available android devices</label>
               <pre>
-                <code>./emulator -list-avds</code>
+                <code>{iOSSimulatorCommand}</code>
               </pre>
-            </List.Item>
-            <List.Item>
-              <label>Running android simulator device</label>
+              <CopyTextBox content={iOSSimulatorCommand} />
+            </Segment>
+            <Segment>
+              <Header>Android Simulator</Header>
+              <Divider />
               <pre>
-                <code>./emulator -avd "device-name"</code>
+                <code>{androidEmulatorCommand}</code>
               </pre>
-            </List.Item>
-          </List>
-        </Segment>
-        <Segment>
-          <Header>General Information</Header>
-          <Divider />
-          <List>
-            <List.Item>
-              <h3>Android:</h3>
-              <p>
-                Default android url on simulator:
-                <pre>
-                  <code>10.0.2.2:3004</code>
-                </pre>
-                <pre>
-                  <code>cd /Users/{user}/Library/Android/sdk/emulator/</code>
-                </pre>
-              </p>
-            </List.Item>
-            <List.Item>
-              <label>Debugging Android Chrome (simulator):</label>
-              <pre>
-                <code>chrome://inspect#devices</code>
-              </pre>
-            </List.Item>
-            <List.Item>
-              <label>
-                <h3>Ports</h3>
-              </label>
-              <p>Team: 3001</p>
-              <p>Team Admin: 3002</p>
-              <p>People: 3003</p>
-              <p>Solo: 3004</p>
-              <p>BullMQ: 3000 (:3000/queues)</p>
-              <p>Admin Panel: 3333 (:3333/admin)</p>
-            </List.Item>
-          </List>
-        </Segment>
-        <Segment>
-          <Header>Commands:</Header>
-          <Divider />
-          <List>
-            <h4>Ionic CLI</h4>
-            <List.Item>
-              <label>Syncing packages across platforms</label>
-              <pre>
-                <code>npx cap sync</code>
-              </pre>
-            </List.Item>
-          </List>
-          <List>
-            <h4>DB Commands</h4>
-            <List.Item>
-              <label>Refresh database</label>
-              <pre>node ace migration:fresh</pre>
-            </List.Item>
-            <List.Item>
-              <label>Reseed database</label>
-              <pre>node ace db:seed</pre>
-            </List.Item>
-          </List>
-          <List>
-            <h4>GitHub Command</h4>
-            <List.Item>
-              <label>View grep branches</label>
-              <pre>git branch | grep "pattern"</pre>
-            </List.Item>
-            <List.Item>
-              <label>Delete multiple branches from grep</label>
-              <pre>git branch | grep "pattern" | xargs git branch -D</pre>
-            </List.Item>
-          </List>
-        </Segment>
+              <CopyTextBox content={androidEmulatorCommand} />
+            </Segment>
+            <Segment>
+              <Header>Android URL Editor</Header>
+              <Divider />
+              <Input
+                value={defaultAndroidUrl}
+                placeholder="URL"
+                onChange={handleAndroidUrlChange}
+              />
+              <Button primary onClick={generateNewAndroidUrl}>
+                Set URL to Android
+              </Button>
+              {androidUrl && (
+                <>
+                  <Divider />
+                  <Label>{androidUrl}</Label>
+                  <CopyTextBox content={androidUrl} />
+                </>
+              )}
+            </Segment>
+            <Segment>
+              <Header>Android Terminal Commands</Header>
+              <Divider />
+              <List>
+                <List.Item>
+                  <label>Listing available android devices</label>
+                  <pre>
+                    <code>./emulator -list-avds</code>
+                  </pre>
+                </List.Item>
+                <List.Item>
+                  <label>Running android simulator device</label>
+                  <pre>
+                    <code>./emulator -avd "device-name"</code>
+                  </pre>
+                </List.Item>
+              </List>
+            </Segment>
+            <Segment>
+              <Header>General Information</Header>
+              <Divider />
+              <List>
+                <List.Item>
+                  <h3>Android:</h3>
+                  <p>
+                    Default android url on simulator:
+                    <pre>
+                      <code>10.0.2.2:3004</code>
+                    </pre>
+                    <pre>
+                      <code>
+                        cd /Users/{user}/Library/Android/sdk/emulator/
+                      </code>
+                    </pre>
+                  </p>
+                </List.Item>
+                <List.Item>
+                  <label>Debugging Android Chrome (simulator):</label>
+                  <pre>
+                    <code>chrome://inspect#devices</code>
+                  </pre>
+                </List.Item>
+                <List.Item>
+                  <label>
+                    <h3>Ports</h3>
+                  </label>
+                  <p>Team: 3001</p>
+                  <p>Team Admin: 3002</p>
+                  <p>People: 3003</p>
+                  <p>Solo: 3004</p>
+                  <p>BullMQ: 3000 (:3000/queues)</p>
+                  <p>Admin Panel: 3333 (:3333/admin)</p>
+                </List.Item>
+              </List>
+            </Segment>
+            <Segment>
+              <Header>Commands:</Header>
+              <Divider />
+              <List>
+                <h4>Ionic CLI</h4>
+                <List.Item>
+                  <label>Syncing packages across platforms</label>
+                  <pre>
+                    <code>npx cap sync</code>
+                  </pre>
+                </List.Item>
+              </List>
+              <List>
+                <h4>DB Commands</h4>
+                <List.Item>
+                  <label>Refresh database</label>
+                  <pre>node ace migration:fresh</pre>
+                </List.Item>
+                <List.Item>
+                  <label>Reseed database</label>
+                  <pre>node ace db:seed</pre>
+                </List.Item>
+              </List>
+              <List>
+                <h4>GitHub Command</h4>
+                <List.Item>
+                  <label>View grep branches</label>
+                  <pre>git branch | grep "pattern"</pre>
+                </List.Item>
+                <List.Item>
+                  <label>Delete multiple branches from grep</label>
+                  <pre>git branch | grep "pattern" | xargs git branch -D</pre>
+                </List.Item>
+              </List>
+            </Segment>
+          </>
+        )}
       </Container>
     </div>
   );
