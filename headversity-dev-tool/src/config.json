@@ -1,3 +1,9 @@
 {
-  "username": "josh"
+  "username": "username",
+  "features": {
+    "enableReminderPopup": false
+  },
+  "settings": {
+    "androidEmulatorName": "androidName"
+  }
 }

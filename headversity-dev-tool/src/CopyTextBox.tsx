@@ -15,13 +15,18 @@ export const CopyTextBox: React.FC<CopyTextBoxProps> = ({
   };
 
   return (
-    <>
-      <Button size="mini" animated="vertical" onClick={onCopyClick}>
+    <div className="generate-button">
+      <Button
+        size="mini"
+        animated="vertical"
+        onClick={onCopyClick}
+        style={{ margin: "10px 0" }}
+      >
         <Button.Content hidden>Copy</Button.Content>
         <Button.Content visible>
           <Icon name="copy" />
         </Button.Content>
       </Button>
-    </>
+    </div>
   );
 };
