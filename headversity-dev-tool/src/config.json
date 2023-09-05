@@ -1,10 +1,9 @@
 {
-  "username": "josh",
+  "username": "username",
   "features": {
-    "enableReminderPopup": true,
-    "showDevInfo": true
+    "enableReminderPopup": false
   },
   "settings": {
-    "androidEmulatorName": "Pixel7"
+    "androidEmulatorName": "AndroidName"
   }
 }

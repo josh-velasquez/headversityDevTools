@@ -52,6 +52,7 @@ function App() {
     Implementations.Features
   );
   const [ticketTitle, setTicketTitle] = useState("");
+  const [showMoreInfo, setShowMoreInfo] = useState<boolean>(false);
   const implementations: string[] = Object.values(Implementations);
   const implementationOptions: DropdownItemProps[] = _.map(
     implementations,
@@ -154,11 +155,15 @@ function App() {
     }
   };
 
+  const onShowMoreInfoClick = () => {
+    setShowMoreInfo(!showMoreInfo);
+  };
+
   return (
     <div
       style={{
         backgroundColor: "#023047",
-        height: !config.features.showDevInfo ? "100vh" : "230vh",
+        height: !showMoreInfo ? "100vh" : "315vh",
         paddingTop: "50px",
       }}
     >
@@ -233,7 +238,10 @@ function App() {
             </>
           )}
         </Segment>
-        {config.features.showDevInfo && (
+        <Button primary onClick={onShowMoreInfoClick}>
+          {showMoreInfo ? "Hide" : "Show More"} Info
+        </Button>
+        {showMoreInfo && (
           <>
             <Segment>
               <Header>iOS Simulator</Header>
