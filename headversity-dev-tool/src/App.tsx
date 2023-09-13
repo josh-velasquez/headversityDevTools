@@ -8,9 +8,7 @@ import {
   DropdownProps,
   Header,
   Input,
-  InputOnChangeData,
   Label,
-  List,
   Segment,
 } from "semantic-ui-react";
 import * as _ from "lodash";
@@ -18,6 +16,7 @@ import "./styling.css";
 
 import config from "./config.json";
 import { CopyTextBox } from "./CopyTextBox";
+import { Info } from "./Info";
 
 enum Implementations {
   Features = "features",
@@ -63,6 +62,36 @@ function App() {
     })
   );
 
+  const ports: { [key: string]: string }[] = [
+    { Team: "3001" },
+    { "Team Admin": "3002" },
+    { People: "3003" },
+    { Solo: "3004" },
+    { BullMQ: "3000 (:3000/queues)" },
+    { "Admin Panel": "3333 (:3333/admin)" },
+  ];
+
+  const backendCommands: { [key: string]: string }[] = [
+    { "Start backend": "npm run dev" },
+    { "Refresh database": "node ace migration:fresh" },
+    { "Reseed database": "node ace db:seed" },
+    { "Start BullMQ": "node ace queue:listen" },
+    { "Start server": "node ace serve" },
+  ];
+
+  const androidInfo: { [key: string]: string }[] = [
+    { "Android Site URL": "10.0.2.2:3004" },
+    {
+      "Android Emulator Path": `cd /Users/${user}/Library/Android/sdk/emulator/`,
+    },
+    { "Open Android": "ionic cap open android" },
+    {
+      "Running Android":
+        "ionic capacitor run android -l --external --port=3004",
+    },
+    { "Android Chrome Debugging": "chrome://inspect#devices" },
+  ];
+
   const generateBranchName = () => {
     if (jiraId === "" || ticketTitle === "") {
       return;
@@ -92,7 +121,13 @@ function App() {
       "]" +
       "(https://headversity.atlassian.net/browse/" +
       jiraIdPr +
-      ")";
+      ")" +
+      "\n\n ## Checklist" +
+      "\n- [ ] Desktop/mobile responsive" +
+      "\n- [ ] Light/dark themes" +
+      "\n- [ ] En/Fr/Sp support" +
+      "\n- [ ] Mixpanel events" +
+      "\n- [ ] SonarCloud issues";
     setPrBody(jiraPrInfo);
 
     if (config.features.enableReminderPopup) {
@@ -108,45 +143,33 @@ function App() {
     setAndroidUrl(newAndroidUrl);
   };
 
-  const handleJiraIdChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    _: InputOnChangeData
-  ) => {
+  const handleJiraIdChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setJiraId(event.currentTarget.value);
   };
 
-  const handJiraIdPrChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    _: InputOnChangeData
-  ) => {
+  const handJiraIdPrChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setJiraIdPr(event.currentTarget.value);
   };
 
   const handleTicketTitleChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    _: InputOnChangeData
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setTicketTitle(event.currentTarget.value);
   };
 
   const handlePrTicketTitleChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    _: InputOnChangeData
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setJiraPrTitle(event.currentTarget.value);
   };
 
   const handleAndroidUrlChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
-    _: InputOnChangeData
+    event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setDefaultAndroidUrl(event.currentTarget.value);
   };
 
-  const onImplementationsSelect = (
-    _: React.SyntheticEvent<HTMLElement, Event>,
-    data: DropdownProps
-  ) => {
+  const onImplementationsSelect = (data: DropdownProps) => {
     if (data.value === null) {
       return;
     }
@@ -163,11 +186,11 @@ function App() {
     <div
       style={{
         backgroundColor: "#023047",
-        height: !showMoreInfo ? "100vh" : "315vh",
+        height: !showMoreInfo ? "100vh" : "350vh",
         paddingTop: "50px",
       }}
     >
-      <Container>
+      <Container style={{ backgroundColor: "#023047" }}>
         <Segment className="segment-container">
           <Header>Branch Name Generator</Header>
           <Divider />
@@ -242,133 +265,18 @@ function App() {
           {showMoreInfo ? "Hide" : "Show More"} Info
         </Button>
         {showMoreInfo && (
-          <>
-            <Segment>
-              <Header>iOS Simulator</Header>
-              <Divider />
-              <pre>
-                <code>{iOSSimulatorCommand}</code>
-              </pre>
-              <CopyTextBox content={iOSSimulatorCommand} />
-            </Segment>
-            <Segment>
-              <Header>Android Simulator</Header>
-              <Divider />
-              <pre>
-                <code>{androidEmulatorCommand}</code>
-              </pre>
-              <CopyTextBox content={androidEmulatorCommand} />
-            </Segment>
-            <Segment>
-              <Header>Android URL Editor</Header>
-              <Divider />
-              <Input
-                value={defaultAndroidUrl}
-                placeholder="URL"
-                onChange={handleAndroidUrlChange}
-              />
-              <Button primary onClick={generateNewAndroidUrl}>
-                Set URL to Android
-              </Button>
-              {androidUrl && (
-                <>
-                  <Divider />
-                  <Label>{androidUrl}</Label>
-                  <CopyTextBox content={androidUrl} />
-                </>
-              )}
-            </Segment>
-            <Segment>
-              <Header>Android Terminal Commands</Header>
-              <Divider />
-              <List>
-                <List.Item>
-                  <label>Listing available android devices</label>
-                  <pre>
-                    <code>./emulator -list-avds</code>
-                  </pre>
-                </List.Item>
-                <List.Item>
-                  <label>Running android simulator device</label>
-                  <pre>
-                    <code>./emulator -avd "device-name"</code>
-                  </pre>
-                </List.Item>
-              </List>
-            </Segment>
-            <Segment>
-              <Header>General Information</Header>
-              <Divider />
-              <List>
-                <List.Item>
-                  <h3>Android:</h3>
-                  <p>
-                    Default android url on simulator:
-                    <pre>
-                      <code>10.0.2.2:3004</code>
-                    </pre>
-                    <pre>
-                      <code>
-                        cd /Users/{user}/Library/Android/sdk/emulator/
-                      </code>
-                    </pre>
-                  </p>
-                </List.Item>
-                <List.Item>
-                  <label>Debugging Android Chrome (simulator):</label>
-                  <pre>
-                    <code>chrome://inspect#devices</code>
-                  </pre>
-                </List.Item>
-                <List.Item>
-                  <label>
-                    <h3>Ports</h3>
-                  </label>
-                  <p>Team: 3001</p>
-                  <p>Team Admin: 3002</p>
-                  <p>People: 3003</p>
-                  <p>Solo: 3004</p>
-                  <p>BullMQ: 3000 (:3000/queues)</p>
-                  <p>Admin Panel: 3333 (:3333/admin)</p>
-                </List.Item>
-              </List>
-            </Segment>
-            <Segment>
-              <Header>Commands:</Header>
-              <Divider />
-              <List>
-                <h4>Ionic CLI</h4>
-                <List.Item>
-                  <label>Syncing packages across platforms</label>
-                  <pre>
-                    <code>npx cap sync</code>
-                  </pre>
-                </List.Item>
-              </List>
-              <List>
-                <h4>DB Commands</h4>
-                <List.Item>
-                  <label>Refresh database</label>
-                  <pre>node ace migration:fresh</pre>
-                </List.Item>
-                <List.Item>
-                  <label>Reseed database</label>
-                  <pre>node ace db:seed</pre>
-                </List.Item>
-              </List>
-              <List>
-                <h4>GitHub Command</h4>
-                <List.Item>
-                  <label>View grep branches</label>
-                  <pre>git branch | grep "pattern"</pre>
-                </List.Item>
-                <List.Item>
-                  <label>Delete multiple branches from grep</label>
-                  <pre>git branch | grep "pattern" | xargs git branch -D</pre>
-                </List.Item>
-              </List>
-            </Segment>
-          </>
+          <Info
+            androidUrl={androidUrl}
+            iOSSimulatorCommand={iOSSimulatorCommand}
+            androidEmulatorCommand={androidEmulatorCommand}
+            defaultAndroidUrl={defaultAndroidUrl}
+            backendCommands={backendCommands}
+            ports={ports}
+            user={user}
+            androidInfo={androidInfo}
+            handleAndroidUrlChange={handleAndroidUrlChange}
+            generateNewAndroidUrl={generateNewAndroidUrl}
+          />
         )}
       </Container>
     </div>

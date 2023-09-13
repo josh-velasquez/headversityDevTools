@@ -10,3 +10,16 @@
   align-self: flex-end;
   margin-top: 10px;
 }
+
+.info-table {
+  border-collapse: collapse;
+  width: 80%;
+  margin: 20px;
+}
+
+.info-table th,
+.info-table td {
+  border: 1px solid black;
+  padding: 10px; /* Adjust the padding to control spacing */
+  text-align: left;
+}
