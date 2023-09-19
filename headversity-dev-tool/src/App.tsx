@@ -77,6 +77,7 @@ function App() {
     { "Reseed database": "node ace db:seed" },
     { "Start BullMQ": "node ace queue:listen" },
     { "Start server": "node ace serve" },
+    { "Manual migrations": "node ace make:migration <users>" },
   ];
 
   const androidInfo: { [key: string]: string }[] = [
@@ -169,7 +170,10 @@ function App() {
     setDefaultAndroidUrl(event.currentTarget.value);
   };
 
-  const onImplementationsSelect = (data: DropdownProps) => {
+  const onImplementationsSelect = (
+    _: React.SyntheticEvent<HTMLElement, Event>,
+    data: DropdownProps
+  ) => {
     if (data.value === null) {
       return;
     }
@@ -186,7 +190,7 @@ function App() {
     <div
       style={{
         backgroundColor: "#023047",
-        height: !showMoreInfo ? "100vh" : "350vh",
+        height: !showMoreInfo ? "120vh" : "400vh",
         paddingTop: "50px",
       }}
     >
@@ -272,7 +276,6 @@ function App() {
             defaultAndroidUrl={defaultAndroidUrl}
             backendCommands={backendCommands}
             ports={ports}
-            user={user}
             androidInfo={androidInfo}
             handleAndroidUrlChange={handleAndroidUrlChange}
             generateNewAndroidUrl={generateNewAndroidUrl}

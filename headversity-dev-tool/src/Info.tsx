@@ -16,7 +16,6 @@ interface InfoProps {
   defaultAndroidUrl: string;
   backendCommands: { [key: string]: string }[];
   ports: { [key: string]: string }[];
-  user: string;
   androidInfo: { [key: string]: string }[];
   handleAndroidUrlChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   generateNewAndroidUrl: () => void;
@@ -27,7 +26,6 @@ export const Info: React.FC<InfoProps> = ({
   androidEmulatorCommand,
   defaultAndroidUrl,
   androidUrl,
-  user,
   ports,
   androidInfo,
   backendCommands,
@@ -36,7 +34,7 @@ export const Info: React.FC<InfoProps> = ({
 }): JSX.Element => {
   return (
     <>
-      <Segment>
+      <Segment className="segment-container">
         <Header>iOS Simulator</Header>
         <Divider />
         <pre>
@@ -44,7 +42,7 @@ export const Info: React.FC<InfoProps> = ({
         </pre>
         <CopyTextBox content={iOSSimulatorCommand} />
       </Segment>
-      <Segment>
+      <Segment className="segment-container">
         <Header>Android Simulator</Header>
         <Divider />
         <pre>
@@ -52,7 +50,7 @@ export const Info: React.FC<InfoProps> = ({
         </pre>
         <CopyTextBox content={androidEmulatorCommand} />
       </Segment>
-      <Segment>
+      <Segment className="segment-container">
         <Header>Android URL Editor</Header>
         <Divider />
         <Input
@@ -71,7 +69,7 @@ export const Info: React.FC<InfoProps> = ({
           </>
         )}
       </Segment>
-      <Segment>
+      <Segment className="segment-container">
         <Header>Android Terminal Commands</Header>
         <Divider />
         <List>
@@ -89,7 +87,7 @@ export const Info: React.FC<InfoProps> = ({
           </List.Item>
         </List>
       </Segment>
-      <Segment>
+      <Segment className="segment-container">
         <Header>General Information</Header>
         <Divider />
         <List>
@@ -127,7 +125,7 @@ export const Info: React.FC<InfoProps> = ({
           </List.Item>
         </List>
       </Segment>
-      <Segment>
+      <Segment className="segment-container">
         <Header>Commands:</Header>
         <Divider />
         <List>
