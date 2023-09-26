@@ -21,6 +21,7 @@ import { Info } from "./Info";
 enum Implementations {
   Features = "features",
   Bugs = "bugs",
+  Refactor = "refactor",
   QA = "qa",
 }
 

@@ -9,4 +9,4 @@ enableReminderPopup - used for reminder user to move items on JIRA after creatin
 showDevInfo - to show extra info for dev environment   
 androidEmulatorName - used for android emulation path  
 ### Information 
-Runs on port 3000
+Runs on port 8080
