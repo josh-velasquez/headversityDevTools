@@ -23,6 +23,7 @@ enum Implementations {
   Bugs = "bugs",
   Refactor = "refactor",
   QA = "qa",
+  Story = "story",
 }
 
 function getCurrentDate(separator = "") {
